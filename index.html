@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ray & Judy's Book Stop | Rockaway, NJ</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bookstop-blue: #2A5C82;
+            --text-dark: #333;
+            --bg-light: #f9f9f9;
+            --white: #ffffff;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            line-height: 1.6;
+            color: var(--text-dark);
+            background-color: var(--bg-light);
+        }
+
+        header {
+            background-color: var(--white);
+            border-bottom: 3px solid var(--bookstop-blue);
+            padding: 2rem 1rem;
+            text-align: center;
+        }
+
+        .hero {
+            background: linear-gradient(rgba(42, 92, 130, 0.8), rgba(42, 92, 130, 0.8)), url('https://via.placeholder.com/1200x400');
+            background-size: cover;
+            color: white;
+            padding: 4rem 1rem;
+            text-align: center;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: auto;
+            padding: 2rem;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .card {
+            background: var(--white);
+            padding: 1.5rem;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            border-top: 4px solid var(--bookstop-blue);
+        }
+
+        .info-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+        }
+
+        .info-table td {
+            padding: 10px;
+            border-bottom: 1px solid #eee;
+        }
+
+        footer {
+            background: #333;
+            color: white;
+            text-align: center;
+            padding: 2rem;
+            margin-top: 3rem;
+        }
+
+        h1, h2, h3 { color: var(--bookstop-blue); margin-top: 0; }
+        .hero h1 { color: white; margin-bottom: 0.5rem; }
+        
+        .badge {
+            background: #e1f0ff;
+            color: var(--bookstop-blue);
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>Ray & Judy’s Book Stop</h1>
+    <p>Serving Rockaway families and collectors since 1984.</p>
+</header>
+
+<section class="hero">
+    <h1>Your Next Great Adventure Awaits</h1>
+    <p>Books • Comics • Maps • Local History • Supplies</p>
+</section>
+
+<div class="container">
+    <div class="grid">
+        <div class="card">
+            <h3>📚 For the Readers</h3>
+            <p>Half-price paperbacks and a massive selection of children’s books. Perfect for school reading lists or weekend browsing.</p>
+            <span class="badge">Classic Finds</span>
+        </div>
+
+        <div class="card">
+            <h3>🎨 For the Collectors</h3>
+            <p>New comics every Wednesday. We carry a full stock of archival bags, boards, and hobby supplies.</p>
+            <span class="badge">New Weekly</span>
+        </div>
+
+        <div class="card">
+            <h3>🗺️ For the Historians</h3>
+            <p>The county's premier spot for local maps and historical NJ atlases. Find your home's history here.</p>
+            <span class="badge">Local Expert</span>
+        </div>
+    </div>
+
+    <div class="grid">
+        <div class="card">
+            <h3>📍 Visit Us</h3>
+            <table class="info-table">
+                <tr><td><strong>Address</strong></td><td>40 W. Main St, Rockaway, NJ</td></tr>
+                <tr><td><strong>Phone</strong></td><td>(973) 586-9182</td></tr>
+                <tr><td><strong>Discount</strong></td><td>10% Off Used Books for Veterans</td></tr>
+            </table>
+        </div>
+
+        <div class="card">
+            <h3>🕒 Store Hours</h3>
+            <table class="info-table">
+                <tr><td>Mon - Thu</td><td>9:30 AM – 3:00 PM</td></tr>
+                <tr><td>Fri - Sat</td><td>Call for Seasonal Hours</td></tr>
+                <tr><td>Sunday</td><td>Closed</td></tr>
+            </table>
+        </div>
+    </div>
+</div>
+
+<footer>
+    <p>&copy; 2026 Ray & Judy’s Book Stop. A Rockaway Borough Original.</p>
+</footer>
+
+</body>
+</html>
