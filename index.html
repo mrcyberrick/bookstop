@@ -149,7 +149,7 @@
     @media (max-width: 700px) {
       nav { flex-wrap: wrap; }
       .nav-links { justify-content: center; order: 2; width: 100%; border-top: 1px solid rgba(255,255,255,0.06); }
-      .theme-toggle { order: 1; margin-left: auto; }
+      .theme-toggle { order: 1; }
       .toggle-label { display: none; }
     }
 
@@ -463,12 +463,12 @@
     <a href="#visit">Hours &amp; Location</a>
     <a href="#reviews">Reviews</a>
     <a href="#social">Find Us Online</a>
-  </div>
   <button class="theme-toggle" id="themeToggle" aria-label="Toggle light/dark mode">
     <span class="toggle-icon" id="toggleIcon">☀️</span>
     <div class="toggle-track"><div class="toggle-thumb"></div></div>
     <span class="toggle-label" id="toggleLabel">Light mode</span>
   </button>
+  </div>
 </nav>
 
 <!-- ABOUT -->
@@ -546,7 +546,7 @@
           <ul class="contact-list">
             <li><span class="c-icon">📍</span><span><strong>40 W Main St</strong><br>Rockaway, NJ 07866<br><a href="https://maps.google.com/?q=40+W+Main+St+Rockaway+NJ+07866" target="_blank" rel="noopener">Get Directions →</a></span></li>
             <li><span class="c-icon">📞</span><a href="tel:9735869182">(973) 586-9182</a></li>
-            <li><span class="c-icon">✉️</span><a href="mailto:bookstop@hotmail.com">bookstop@hotmail.com</a></li>
+            <li><span class="c-icon">✉️</span><a href="/cdn-cgi/l/email-protection#70121f1f1b03041f0030181f041d11191c5e131f1d"><span class="__cf_email__" data-cfemail="bddfd2d2d6cec9d2cdfdd5d2c9d0dcd4d193ded2d0">[email&#160;protected]</span></a></li>
             <li><span class="c-icon">♿</span><span>Wheelchair accessible &bull; Street parking</span></li>
             <li><span class="c-icon">💳</span><span>Credit cards accepted</span></li>
           </ul>
@@ -660,7 +660,7 @@
   </div>
 </footer>
 
-<script>
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
   const obs = new IntersectionObserver(
     entries => entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); }),
     { threshold: 0.1 }
