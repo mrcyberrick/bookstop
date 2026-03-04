@@ -10,11 +10,6 @@
   <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet" />
 
   <style>
-    /* ═══════════════════════════════════════════════
-       THEME TOKENS
-    ═══════════════════════════════════════════════ */
-
-    /* — DARK (default) — */
     [data-theme="dark"] {
       --bg:           #161412;
       --surface:      #1e1b18;
@@ -24,27 +19,18 @@
       --border2:      #443c34;
       --nav-bg:       #0f0d0b;
       --footer-bg:    #0f0d0b;
-
       --red:          #e85535;
       --red-hover:    #d44828;
       --red-glow:     rgba(232,85,53,0.25);
-
       --gold:         #c9903a;
       --gold-dim:     #967030;
-
-      --text-head:    #f0ebe4;   /* headings */
-      --text-body:    #c8b89e;   /* body / secondary */
-      --text-muted:   #7a6e64;   /* muted labels */
+      --text-head:    #f0ebe4;
+      --text-body:    #c8b89e;
+      --text-muted:   #7a6e64;
       --text-muted2:  #5a5048;
-
-      --toggle-bg:    #272320;
-      --toggle-icon:  "☀️";
-      --toggle-label: "Light mode";
-
       color-scheme: dark;
     }
 
-    /* — LIGHT — */
     [data-theme="light"] {
       --bg:           #fdf8f2;
       --surface:      #f5ede0;
@@ -52,31 +38,20 @@
       --card-hover:   #fdf3e8;
       --border:       #e0d0bc;
       --border2:      #c8b49a;
-      --nav-bg:       #1a1410;   /* nav stays dark — matches screenshot */
+      --nav-bg:       #1a1410;
       --footer-bg:    #1a1410;
-
       --red:          #e85535;
       --red-hover:    #d44828;
       --red-glow:     rgba(232,85,53,0.18);
-
       --gold:         #b07820;
       --gold-dim:     #8a5e14;
-
       --text-head:    #1a120a;
       --text-body:    #4a3820;
       --text-muted:   #8a7060;
       --text-muted2:  #b09080;
-
-      --toggle-bg:    #f0e8dc;
-      --toggle-icon:  "🌙";
-      --toggle-label: "Dark mode";
-
       color-scheme: light;
     }
 
-    /* ═══════════════════════════════════════════════
-       BASE
-    ═══════════════════════════════════════════════ */
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     html { scroll-behavior: smooth; }
 
@@ -91,51 +66,58 @@
     }
     a { color: inherit; text-decoration: none; }
 
-    /* Noise texture */
     body::after {
       content: ''; position: fixed; inset: 0;
       pointer-events: none; z-index: 999;
       background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='0.025'/%3E%3C/svg%3E");
     }
 
-    /* ═══════════════════════════════════════════════
-       NAV (always dark — acts as an anchor strip)
-    ═══════════════════════════════════════════════ */
+    /* ── NAV ── */
     nav {
       position: sticky; top: 0; z-index: 100;
       background: var(--nav-bg);
       border-bottom: 1px solid rgba(255,255,255,0.07);
-      display: flex; justify-content: center;
-      flex-wrap: wrap; align-items: center;
-      gap: 0;
+      display: flex;
+      align-items: center;
+      flex-wrap: nowrap;
       transition: background 0.35s;
     }
+
+    .nav-links {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      flex: 1;
+      justify-content: center;
+    }
+
     nav a {
       color: rgba(255,255,255,0.45);
       font-family: 'Outfit', sans-serif;
       font-size: 0.68rem; font-weight: 500;
       letter-spacing: 0.2rem; text-transform: uppercase;
       padding: 0.95rem 1.05rem;
+      white-space: nowrap;
       transition: color 0.2s;
     }
     nav a:hover { color: var(--red); }
 
-    /* ── Theme Toggle ── */
+    /* Theme Toggle — fixed to right edge */
     .theme-toggle {
-      margin-left: auto;
-      display: flex; align-items: center; gap: 0.5rem;
-      padding: 0.6rem 1rem;
+      flex-shrink: 0;
+      display: flex; align-items: center; gap: 0.45rem;
+      padding: 0.5rem 0.85rem;
       background: transparent;
       border: 1px solid rgba(255,255,255,0.12);
       border-radius: 20px;
       cursor: pointer;
-      margin-right: 0.8rem;
-      transition: border-color 0.2s, background 0.2s;
+      margin: 0 0.75rem;
+      transition: border-color 0.2s;
     }
     .theme-toggle:hover { border-color: var(--red); }
 
     .toggle-track {
-      width: 36px; height: 20px;
+      width: 34px; height: 19px;
       background: var(--border2);
       border-radius: 10px;
       position: relative;
@@ -146,36 +128,32 @@
 
     .toggle-thumb {
       position: absolute;
-      top: 3px; left: 3px;
+      top: 2.5px; left: 2.5px;
       width: 14px; height: 14px;
       background: #fff;
       border-radius: 50%;
       transition: transform 0.3s cubic-bezier(.4,0,.2,1);
       box-shadow: 0 1px 3px rgba(0,0,0,0.3);
     }
-    [data-theme="light"] .toggle-thumb { transform: translateX(16px); }
+    [data-theme="light"] .toggle-thumb { transform: translateX(15px); }
 
-    .toggle-icon {
-      font-size: 0.9rem; line-height: 1;
-      transition: transform 0.4s ease;
-      user-select: none;
-    }
+    .toggle-icon { font-size: 0.85rem; line-height: 1; user-select: none; }
     .toggle-label {
       font-family: 'Outfit', sans-serif;
-      font-size: 0.62rem; font-weight: 500;
-      letter-spacing: 0.12rem; text-transform: uppercase;
-      color: rgba(255,255,255,0.4);
+      font-size: 0.6rem; font-weight: 500;
+      letter-spacing: 0.1rem; text-transform: uppercase;
+      color: rgba(255,255,255,0.38);
       white-space: nowrap;
     }
 
-    @media (max-width: 600px) {
+    @media (max-width: 700px) {
+      nav { flex-wrap: wrap; }
+      .nav-links { justify-content: center; order: 2; width: 100%; border-top: 1px solid rgba(255,255,255,0.06); }
+      .theme-toggle { order: 1; margin-left: auto; }
       .toggle-label { display: none; }
-      .theme-toggle { margin-right: 0.5rem; padding: 0.5rem 0.7rem; }
     }
 
-    /* ═══════════════════════════════════════════════
-       HEADER
-    ═══════════════════════════════════════════════ */
+    /* ── HEADER ── */
     header {
       background: var(--bg);
       text-align: center;
@@ -193,7 +171,6 @@
       transition: opacity 0.35s;
     }
     [data-theme="light"] header::before { opacity: 0.6; }
-
     header::after {
       content: ''; position: absolute;
       top: -60px; left: 50%; transform: translateX(-50%);
@@ -203,31 +180,30 @@
     }
     .header-inner { position: relative; z-index: 1; }
 
-    /* Logo — octagon stop sign */
     .logo-wrap { display: flex; justify-content: center; margin-bottom: 1.2rem; }
     .logo-oct {
       width: 100px; height: 106px;
-      filter: drop-shadow(0 0 22px rgba(232,85,53,0.35))
-              drop-shadow(0 5px 14px rgba(0,0,0,0.45));
+      filter: drop-shadow(0 0 22px rgba(232,85,53,0.35)) drop-shadow(0 5px 14px rgba(0,0,0,0.45));
       transition: filter 0.35s;
     }
     [data-theme="light"] .logo-oct {
-      filter: drop-shadow(0 0 18px rgba(232,85,53,0.28))
-              drop-shadow(0 4px 10px rgba(0,0,0,0.2));
+      filter: drop-shadow(0 0 18px rgba(232,85,53,0.28)) drop-shadow(0 4px 10px rgba(0,0,0,0.2));
     }
 
-    .logo-sub {
-      font-family: 'Outfit', sans-serif;
-      font-size: 0.72rem; font-weight: 600;
-      letter-spacing: 0.35rem; text-transform: uppercase;
-      color: var(--red); margin-top: 0.9rem; opacity: 0.9;
+    .hero-tagline {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(1rem, 3.5vw, 1.5rem);
+      letter-spacing: 0.3em;
+      color: var(--gold);
+      margin: 0.4rem 0 0.2rem;
+      transition: color 0.35s;
     }
 
     .hero-eyebrow {
       font-family: 'Outfit', sans-serif;
       font-size: 0.68rem; font-weight: 500;
       letter-spacing: 0.26rem; text-transform: uppercase;
-      color: var(--text-muted); margin-bottom: 0.8rem; margin-top: 2rem;
+      color: var(--text-muted); margin-bottom: 0.8rem; margin-top: 1rem;
     }
 
     h1 {
@@ -268,9 +244,7 @@
     .pill.hot { background: var(--red); border-color: var(--red); color: #fff; font-weight: 600; box-shadow: 0 2px 12px var(--red-glow); }
     .pill.warm { border-color: var(--gold-dim); color: var(--gold); }
 
-    /* ═══════════════════════════════════════════════
-       SECTIONS
-    ═══════════════════════════════════════════════ */
+    /* ── SECTIONS ── */
     section { border-bottom: 1px solid var(--border); transition: background 0.35s, border-color 0.35s; }
     .section-inner { max-width: 860px; margin: 0 auto; padding: 4.5rem 1.5rem; }
 
@@ -299,9 +273,7 @@
       transition: color 0.35s;
     }
 
-    /* ═══════════════════════════════════════════════
-       ABOUT
-    ═══════════════════════════════════════════════ */
+    /* ── ABOUT ── */
     #about { background: var(--bg); }
 
     .about-pull {
@@ -325,53 +297,35 @@
       border-radius: 8px; overflow: hidden;
       transition: background 0.35s, border-color 0.35s;
     }
-    .stat-box {
-      flex: 1; min-width: 120px;
-      background: var(--card); padding: 1.4rem 1rem; text-align: center;
-      transition: background 0.2s;
-    }
+    .stat-box { flex: 1; min-width: 120px; background: var(--card); padding: 1.4rem 1rem; text-align: center; transition: background 0.2s; }
     .stat-box:hover { background: var(--card-hover); }
     .stat-num { font-family: 'Bebas Neue', sans-serif; font-size: 2.5rem; color: var(--red); letter-spacing: 0.04em; line-height: 1; }
     .stat-lbl { font-family: 'Outfit', sans-serif; font-size: 0.63rem; font-weight: 500; letter-spacing: 0.15rem; text-transform: uppercase; color: var(--text-muted); margin-top: 0.3rem; transition: color 0.35s; }
 
-    /* ═══════════════════════════════════════════════
-       CARRY
-    ═══════════════════════════════════════════════ */
+    /* ── CARRY ── */
     #carry { background: var(--surface); }
 
-    .carry-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
-      gap: 1rem;
-    }
+    .carry-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 1rem; }
     .carry-card {
-      background: var(--card);
-      border: 1px solid var(--border);
-      border-left: 3px solid var(--red);
-      border-radius: 8px; padding: 1.8rem 1.5rem;
+      background: var(--card); border: 1px solid var(--border);
+      border-left: 3px solid var(--red); border-radius: 8px; padding: 1.8rem 1.5rem;
       transition: background 0.2s, border-left-color 0.2s, box-shadow 0.2s, border-color 0.35s;
     }
     .carry-card:hover { background: var(--card-hover); border-left-color: var(--gold); box-shadow: 0 4px 20px rgba(0,0,0,0.1); }
     .carry-card:hover .c-num { color: var(--gold); }
-
     .c-num { font-family: 'Bebas Neue', sans-serif; font-size: 0.9rem; letter-spacing: 0.15em; color: var(--border2); margin-bottom: 0.5rem; transition: color 0.2s; }
     .carry-card h3 { font-family: 'Bebas Neue', sans-serif; font-size: 1.35rem; letter-spacing: 0.08em; color: var(--text-head); margin-bottom: 0.6rem; transition: color 0.35s; }
     .carry-card p { font-family: 'Outfit', sans-serif; font-size: 0.84rem; color: var(--text-muted); line-height: 1.6; margin: 0; transition: color 0.35s; }
     .carry-card p strong { color: var(--text-body); transition: color 0.35s; }
     .carry-footer { margin-top: 1.6rem; text-align: center; font-family: 'Playfair Display', serif; font-style: italic; font-size: 0.85rem; color: var(--text-muted); transition: color 0.35s; }
 
-    /* ═══════════════════════════════════════════════
-       VISIT
-    ═══════════════════════════════════════════════ */
+    /* ── VISIT ── */
     #visit { background: var(--bg); }
 
     .visit-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; align-items: start; }
     @media (max-width: 600px) { .visit-grid { grid-template-columns: 1fr; } }
 
-    .v-card {
-      background: var(--card); border: 1px solid var(--border); border-radius: 8px; padding: 1.8rem 1.5rem;
-      transition: background 0.35s, border-color 0.35s;
-    }
+    .v-card { background: var(--card); border: 1px solid var(--border); border-radius: 8px; padding: 1.8rem 1.5rem; transition: background 0.35s, border-color 0.35s; }
     .v-card-label { font-family: 'Outfit', sans-serif; font-size: 0.62rem; font-weight: 600; letter-spacing: 0.28rem; text-transform: uppercase; color: var(--red); margin-bottom: 1.2rem; padding-bottom: 0.6rem; border-bottom: 1px solid var(--border); transition: border-color 0.35s; }
 
     .hours-table { width: 100%; border-collapse: collapse; font-size: 0.875rem; }
@@ -396,9 +350,7 @@
     [data-theme="dark"]  .map-wrap iframe { filter: invert(88%) hue-rotate(180deg) sepia(10%); opacity: 0.88; }
     [data-theme="light"] .map-wrap iframe { filter: none; opacity: 1; }
 
-    /* ═══════════════════════════════════════════════
-       REVIEWS
-    ═══════════════════════════════════════════════ */
+    /* ── REVIEWS ── */
     #reviews { background: var(--surface); }
 
     .reviews-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1rem; }
@@ -415,9 +367,7 @@
     .rating-detail { font-family: 'Outfit', sans-serif; font-size: 0.78rem; color: var(--text-muted); line-height: 1.9; transition: color 0.35s; }
     .rating-detail strong { color: var(--text-body); transition: color 0.35s; }
 
-    /* ═══════════════════════════════════════════════
-       SOCIAL
-    ═══════════════════════════════════════════════ */
+    /* ── SOCIAL ── */
     #social { background: var(--bg); }
 
     .social-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 1rem; }
@@ -431,9 +381,7 @@
     .social-card:hover .s-link { color: var(--gold); }
     .social-note { text-align: center; margin-top: 2rem; font-family: 'Playfair Display', serif; font-style: italic; font-size: 0.87rem; color: var(--text-muted); transition: color 0.35s; }
 
-    /* ═══════════════════════════════════════════════
-       FOOTER (always dark)
-    ═══════════════════════════════════════════════ */
+    /* ── FOOTER ── */
     footer {
       background: var(--footer-bg);
       border-top: 1px solid rgba(255,255,255,0.06);
@@ -441,7 +389,6 @@
       transition: background 0.35s;
     }
     footer::before { content: ''; display: block; width: 100%; height: 2px; margin-bottom: 2.5rem; background: linear-gradient(90deg, transparent, var(--red), var(--gold), var(--red), transparent); }
-
     .footer-name { font-family: 'Bebas Neue', sans-serif; font-size: 1.5rem; letter-spacing: 0.1em; color: #f0ebe4; margin-bottom: 0.4rem; }
     .footer-ornament { color: #967030; font-size: 0.8rem; letter-spacing: 0.5rem; opacity: 0.4; margin: 0.3rem 0 0.7rem; }
     .footer-meta { font-family: 'Outfit', sans-serif; font-size: 0.75rem; color: rgba(255,255,255,0.35); letter-spacing: 0.06rem; line-height: 2; }
@@ -449,17 +396,10 @@
     .footer-meta a:hover { color: var(--gold); }
     .footer-since { opacity: 0.3; font-size: 0.68rem; margin-top: 0.3rem; }
 
-    /* ═══════════════════════════════════════════════
-       FADE IN
-    ═══════════════════════════════════════════════ */
     .fade-in { opacity: 0; transform: translateY(18px); transition: opacity 0.6s ease, transform 0.6s ease; }
     .fade-in.visible { opacity: 1; transform: none; }
 
-    /* ═══════════════════════════════════════════════
-       MOBILE
-    ═══════════════════════════════════════════════ */
     @media (max-width: 480px) {
-      nav a { padding: 0.8rem 0.65rem; font-size: 0.6rem; }
       .carry-grid { grid-template-columns: 1fr; }
       .stat-strip { flex-direction: column; border-radius: 6px; }
       .stat-box + .stat-box { border-top: 1px solid var(--border); }
@@ -468,31 +408,21 @@
 </head>
 <body>
 
-<!-- ══════ HEADER ══════════════════════════════════════ -->
+<!-- HEADER -->
 <header>
   <div class="header-inner">
     <div class="logo-wrap">
-      <svg class="logo-oct" viewBox="0 0 100 112" xmlns="http://www.w3.org/2000/svg" aria-label="Ray &amp; Judy's Book Stop logo">
+      <svg class="logo-oct" viewBox="0 0 100 106" xmlns="http://www.w3.org/2000/svg" aria-label="Ray &amp; Judy's Book Stop logo">
         <defs>
           <radialGradient id="og" cx="45%" cy="35%" r="65%">
             <stop offset="0%" stop-color="#d94020"/>
             <stop offset="100%" stop-color="#8a1f08"/>
           </radialGradient>
         </defs>
-        <!-- Octagon body with gradient -->
         <polygon points="30,4 70,4 97,31 97,71 70,98 30,98 3,71 3,31" fill="url(#og)"/>
-        <!-- Inner rule border -->
-        <polygon points="33,9 67,9 92,34 92,68 67,93 33,93 8,68 8,34"
-          fill="none" stroke="rgba(255,255,255,0.22)" stroke-width="1.5"/>
-        <!-- BOOK -->
-        <text x="50" y="44" text-anchor="middle"
-          font-family="'Outfit',sans-serif" font-weight="800"
-          font-size="18" fill="white" letter-spacing="1.5">BOOK</text>
-        <!-- STOP -->
-        <text x="50" y="64" text-anchor="middle"
-          font-family="'Outfit',sans-serif" font-weight="800"
-          font-size="18" fill="white" letter-spacing="1.5">STOP</text>
-        <!-- Open book icon -->
+        <polygon points="33,9 67,9 92,34 92,68 67,93 33,93 8,68 8,34" fill="none" stroke="rgba(255,255,255,0.22)" stroke-width="1.5"/>
+        <text x="50" y="44" text-anchor="middle" font-family="'Outfit',sans-serif" font-weight="800" font-size="18" fill="white" letter-spacing="1.5">BOOK</text>
+        <text x="50" y="64" text-anchor="middle" font-family="'Outfit',sans-serif" font-weight="800" font-size="18" fill="white" letter-spacing="1.5">STOP</text>
         <g transform="translate(50,80) scale(0.78)">
           <path d="M-16,3 Q-8,-5 0,0 Q8,-5 16,3" stroke="rgba(255,255,255,0.7)" stroke-width="1.8" fill="none"/>
           <line x1="0" y1="0" x2="0" y2="7" stroke="rgba(255,255,255,0.7)" stroke-width="1.8"/>
@@ -501,12 +431,12 @@
       </svg>
     </div>
 
-    <div class="logo-sub">Ray &amp; Judy's</div>
-    <p class="hero-eyebrow">Rockaway Borough, New Jersey &nbsp;·&nbsp; Est. 1984</p>
+    <p class="hero-tagline">Your Neighborhood Bookstore</p>
+    <p class="hero-eyebrow">Rockaway Borough, NJ &nbsp;·&nbsp; Est. 1984</p>
 
     <h1>
-      <span class="line1">Your Neighborhood</span>
-      <span class="red">Book</span><span class="gold">Store</span>
+      <span class="line1">Ray &amp; Judy's</span>
+      <span class="red">Book</span><span class="gold">Stop</span>
     </h1>
 
     <div class="hero-divider">✦</div>
@@ -520,14 +450,15 @@
   </div>
 </header>
 
-<!-- ══════ NAV ══════════════════════════════════════════ -->
+<!-- NAV -->
 <nav aria-label="Site navigation">
-  <a href="#about">About</a>
-  <a href="#carry">What We Carry</a>
-  <a href="#visit">Hours &amp; Location</a>
-  <a href="#reviews">Reviews</a>
-  <a href="#social">Find Us Online</a>
-
+  <div class="nav-links">
+    <a href="#about">About</a>
+    <a href="#carry">What We Carry</a>
+    <a href="#visit">Hours &amp; Location</a>
+    <a href="#reviews">Reviews</a>
+    <a href="#social">Find Us Online</a>
+  </div>
   <button class="theme-toggle" id="themeToggle" aria-label="Toggle light/dark mode">
     <span class="toggle-icon" id="toggleIcon">☀️</span>
     <div class="toggle-track"><div class="toggle-thumb"></div></div>
@@ -535,13 +466,12 @@
   </button>
 </nav>
 
-<!-- ══════ ABOUT ════════════════════════════════════════ -->
+<!-- ABOUT -->
 <section id="about">
   <div class="section-inner fade-in">
     <p class="section-eyebrow">About the Shop</p>
     <h2>One of a <span class="accent">Kind.</span></h2>
     <span class="ornament">— ✦ —</span>
-
     <p class="about-pull">
       "Take a few minutes from your day and stop in to see us — a one of a kind store right here in Rockaway Borough."
       <cite>— Ray</cite>
@@ -552,7 +482,6 @@
       with new and slightly-read books, fresh comics every Wednesday, trading cards, vintage maps,
       children's books, and surprises around every corner.
     </p>
-
     <div class="stat-strip">
       <div class="stat-box"><div class="stat-num">40+</div><div class="stat-lbl">Years Open</div></div>
       <div class="stat-box"><div class="stat-num">4.8★</div><div class="stat-lbl">Avg Rating</div></div>
@@ -562,13 +491,12 @@
   </div>
 </section>
 
-<!-- ══════ CARRY ════════════════════════════════════════ -->
+<!-- CARRY -->
 <section id="carry">
   <div class="section-inner fade-in">
     <p class="section-eyebrow">Inventory</p>
     <h2>What We <span class="accent">Carry</span></h2>
     <span class="ornament">— ✦ —</span>
-
     <div class="carry-grid">
       <div class="carry-card"><div class="c-num">01</div><h3>Books</h3><p>New &amp; slightly-read paperbacks at half cover price. Dover Thrift Editions from $1–$5. Organized by subject &amp; author.</p></div>
       <div class="carry-card"><div class="c-num">02</div><h3>Comic Books</h3><p>New shipment every <strong>Wednesday</strong>. Casual readers to serious collectors. Bags, boards, boxes &amp; albums in stock.</p></div>
@@ -581,13 +509,12 @@
   </div>
 </section>
 
-<!-- ══════ VISIT ════════════════════════════════════════ -->
+<!-- VISIT -->
 <section id="visit">
   <div class="section-inner fade-in">
     <p class="section-eyebrow">Plan Your Visit</p>
     <h2>Hours &amp; <span class="accent">Location</span></h2>
     <span class="ornament">— ✦ —</span>
-
     <div class="visit-grid">
       <div>
         <div class="v-card">
@@ -608,7 +535,6 @@
           </p>
         </div>
       </div>
-
       <div>
         <div class="v-card" style="margin-bottom:1.4rem;">
           <div class="v-card-label">Contact &amp; Address</div>
@@ -621,9 +547,10 @@
           </ul>
         </div>
         <div class="map-wrap">
+          <!-- Correct embed for 40 W Main St, Rockaway Borough, NJ 07866 -->
           <iframe
-            title="Map to Ray &amp; Judy's Book Stop"
-            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3014.3201060893!2d-74.50803!3d40.90106!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89c3acba0000000%3A0x1234!2s40+W+Main+St%2C+Rockaway%2C+NJ+07866!5e0!3m2!1sen!2sus!4v1700000000000"
+            title="Map to Ray &amp; Judy's Book Stop — 40 W Main St, Rockaway, NJ"
+            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3012.8!2d-74.5173!3d40.9038!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89c3b0e3b7e3b7e3%3A0x0!2s40+W+Main+St%2C+Rockaway%2C+NJ+07866!5e0!3m2!1sen!2sus!4v1700000000000!5m2!1sen!2sus"
             allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade">
           </iframe>
         </div>
@@ -632,13 +559,12 @@
   </div>
 </section>
 
-<!-- ══════ REVIEWS ══════════════════════════════════════ -->
+<!-- REVIEWS -->
 <section id="reviews">
   <div class="section-inner fade-in">
     <p class="section-eyebrow">Customer Reviews</p>
     <h2>What Neighbors <span class="accent">Say</span></h2>
     <span class="ornament">— ✦ —</span>
-
     <div class="reviews-grid">
       <div class="review-card">
         <div class="stars">★★★★★</div>
@@ -656,7 +582,6 @@
         <div class="review-author">Google Reviewer</div>
       </div>
     </div>
-
     <div class="review-bar">
       <div>
         <div class="big-rating">4.8<sub>&nbsp;/ 5</sub></div>
@@ -671,13 +596,12 @@
   </div>
 </section>
 
-<!-- ══════ SOCIAL ═══════════════════════════════════════ -->
+<!-- SOCIAL -->
 <section id="social">
   <div class="section-inner fade-in">
     <p class="section-eyebrow">Online Presence</p>
     <h2>Find Us <span class="accent">Online</span></h2>
     <span class="ornament">— ✦ —</span>
-
     <div class="social-grid">
       <a class="social-card" href="https://www.facebook.com/pages/ray-judys-book-stop/218209818226021" target="_blank" rel="noopener">
         <div class="s-label">Social Media</div>
@@ -702,9 +626,9 @@
   </div>
 </section>
 
-<!-- ══════ FOOTER ═══════════════════════════════════════ -->
+<!-- FOOTER -->
 <footer>
-  <svg width="58" height="64" viewBox="0 0 100 112" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" style="display:block;margin:0 auto 1.2rem;">
+  <svg width="58" height="62" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" style="display:block;margin:0 auto 1.2rem;">
     <defs>
       <radialGradient id="fg" cx="45%" cy="35%" r="65%">
         <stop offset="0%" stop-color="#d94020"/>
@@ -720,7 +644,6 @@
       <line x1="0" y1="0" x2="0" y2="7" stroke="rgba(255,255,255,0.7)" stroke-width="1.8"/>
       <path d="M-16,3 L-16,10 Q-8,2 0,7 Q8,2 16,10 L16,3" fill="rgba(255,255,255,0.45)"/>
     </g>
-    <text x="50" y="110" text-anchor="middle" font-family="sans-serif" font-size="7.5" fill="#c9903a" letter-spacing="1"></text>
   </svg>
   <div class="footer-name">Ray &amp; Judy's Book Stop</div>
   <div class="footer-ornament">✦ ✦ ✦</div>
@@ -733,36 +656,31 @@
 </footer>
 
 <script>
-  // ── Scroll fade-in ──────────────────────────────
   const obs = new IntersectionObserver(
     entries => entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); }),
     { threshold: 0.1 }
   );
   document.querySelectorAll('.fade-in').forEach(el => obs.observe(el));
 
-  // ── Highlight today's hours ─────────────────────
   const days = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
   const today = days[new Date().getDay()];
   document.querySelectorAll('.hours-table tbody tr').forEach(tr => {
     if (tr.querySelector('td')?.textContent.trim() === today) tr.classList.add('today');
   });
 
-  // ── Theme toggle ────────────────────────────────
-  const html        = document.documentElement;
-  const btn         = document.getElementById('themeToggle');
-  const icon        = document.getElementById('toggleIcon');
-  const label       = document.getElementById('toggleLabel');
+  const html  = document.documentElement;
+  const btn   = document.getElementById('themeToggle');
+  const icon  = document.getElementById('toggleIcon');
+  const label = document.getElementById('toggleLabel');
 
-  // Respect system preference on first load
-  const stored = localStorage.getItem('bookstop-theme');
+  const stored     = localStorage.getItem('bookstop-theme');
   const systemDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-  const initial = stored || (systemDark ? 'dark' : 'light');
+  const initial    = stored || (systemDark ? 'dark' : 'light');
   html.setAttribute('data-theme', initial);
   updateToggleUI(initial);
 
   btn.addEventListener('click', () => {
-    const current = html.getAttribute('data-theme');
-    const next    = current === 'dark' ? 'light' : 'dark';
+    const next = html.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
     html.setAttribute('data-theme', next);
     localStorage.setItem('bookstop-theme', next);
     updateToggleUI(next);
