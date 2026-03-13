@@ -1,0 +1,671 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>What's New — Ray & Judy's Book Stop</title>
+  <meta name="description" content="Weekly pull list and new comics arrivals at Ray & Judy's Book Stop, Rockaway NJ." />
+  <link rel="icon" type="image/x-icon" href="favicon.ico" />
+  <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png" />
+  <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet" />
+
+  <style>
+    /* ═══════════════════════════════════════════════
+       THEME TOKENS — identical to index.html
+    ═══════════════════════════════════════════════ */
+    [data-theme="dark"] {
+      --bg:           #161412;
+      --surface:      #1e1b18;
+      --card:         #272320;
+      --card-hover:   #2e2a26;
+      --border:       #312b25;
+      --border2:      #443c34;
+      --nav-bg:       #0f0d0b;
+      --footer-bg:    #0f0d0b;
+      --red:          #e85535;
+      --red-hover:    #d44828;
+      --red-glow:     rgba(232,85,53,0.25);
+      --gold:         #c9903a;
+      --gold-dim:     #967030;
+      --text-head:    #f0ebe4;
+      --text-body:    #c8b89e;
+      --text-muted:   #7a6e64;
+      --text-muted2:  #5a5048;
+      color-scheme: dark;
+    }
+    [data-theme="light"] {
+      --bg:           #fdf8f2;
+      --surface:      #f5ede0;
+      --card:         #ffffff;
+      --card-hover:   #fdf3e8;
+      --border:       #e0d0bc;
+      --border2:      #c8b49a;
+      --nav-bg:       #1a1410;
+      --footer-bg:    #1a1410;
+      --red:          #e85535;
+      --red-hover:    #d44828;
+      --red-glow:     rgba(232,85,53,0.18);
+      --gold:         #b07820;
+      --gold-dim:     #8a5e14;
+      --text-head:    #1a120a;
+      --text-body:    #4a3820;
+      --text-muted:   #8a7060;
+      --text-muted2:  #b09080;
+      color-scheme: light;
+    }
+
+    /* ═══════════════════════════════════════════════
+       BASE
+    ═══════════════════════════════════════════════ */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      background: var(--bg); color: var(--text-body);
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: 16px; line-height: 1.7; overflow-x: hidden;
+      transition: background 0.35s ease, color 0.35s ease;
+    }
+    a { color: inherit; text-decoration: none; }
+
+    body::after {
+      content: ''; position: fixed; inset: 0; pointer-events: none; z-index: 999;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='0.025'/%3E%3C/svg%3E");
+    }
+
+    /* ═══════════════════════════════════════════════
+       NAV
+    ═══════════════════════════════════════════════ */
+    nav {
+      position: sticky; top: 0; z-index: 100;
+      background: var(--nav-bg);
+      border-bottom: 1px solid rgba(255,255,255,0.07);
+      display: flex; align-items: center; flex-wrap: nowrap;
+      transition: background 0.35s;
+    }
+    .nav-links { display: flex; flex-wrap: wrap; align-items: center; flex: 1; justify-content: center; }
+    nav a {
+      color: rgba(255,255,255,0.45);
+      font-family: 'Outfit', sans-serif;
+      font-size: 0.68rem; font-weight: 500;
+      letter-spacing: 0.2rem; text-transform: uppercase;
+      padding: 0.95rem 1.05rem; white-space: nowrap;
+      transition: color 0.2s;
+    }
+    nav a:hover { color: var(--red); }
+    nav a.active { color: var(--gold); }
+    .theme-toggle {
+      flex-shrink: 0; display: flex; align-items: center; gap: 0.45rem;
+      padding: 0.5rem 0.85rem; background: transparent;
+      border: 1px solid rgba(255,255,255,0.12); border-radius: 20px;
+      cursor: pointer; margin: 0 0.75rem; transition: border-color 0.2s;
+    }
+    .theme-toggle:hover { border-color: var(--red); }
+    .toggle-track {
+      width: 34px; height: 19px; background: var(--border2);
+      border-radius: 10px; position: relative; transition: background 0.3s; flex-shrink: 0;
+    }
+    [data-theme="light"] .toggle-track { background: var(--red); }
+    .toggle-thumb {
+      position: absolute; top: 2.5px; left: 2.5px;
+      width: 14px; height: 14px; background: #fff; border-radius: 50%;
+      transition: transform 0.3s cubic-bezier(.4,0,.2,1);
+      box-shadow: 0 1px 3px rgba(0,0,0,0.3);
+    }
+    [data-theme="light"] .toggle-thumb { transform: translateX(15px); }
+    .toggle-icon { font-size: 0.85rem; line-height: 1; user-select: none; }
+    .toggle-label {
+      font-family: 'Outfit', sans-serif; font-size: 0.6rem; font-weight: 500;
+      letter-spacing: 0.1rem; text-transform: uppercase;
+      color: rgba(255,255,255,0.38); white-space: nowrap;
+    }
+    @media (max-width: 700px) {
+      nav { flex-wrap: wrap; }
+      .nav-links { justify-content: center; order: 2; width: 100%; border-top: 1px solid rgba(255,255,255,0.06); }
+      .theme-toggle { order: 1; margin-left: auto; }
+      .toggle-label { display: none; }
+    }
+
+    /* ═══════════════════════════════════════════════
+       HEADER — full match to index.html
+    ═══════════════════════════════════════════════ */
+    header {
+      background: var(--bg); text-align: center;
+      padding: 4.5rem 1.5rem 4rem;
+      border-bottom: 1px solid var(--border);
+      position: relative; overflow: hidden; transition: background 0.35s;
+    }
+    header::before {
+      content: ''; position: absolute; inset: 0; pointer-events: none;
+      background-image:
+        linear-gradient(var(--border) 1px, transparent 1px),
+        linear-gradient(90deg, var(--border) 1px, transparent 1px);
+      background-size: 48px 48px; opacity: 0.4; transition: opacity 0.35s;
+    }
+    [data-theme="light"] header::before { opacity: 0.6; }
+    header::after {
+      content: ''; position: absolute;
+      top: -60px; left: 50%; transform: translateX(-50%);
+      width: 500px; height: 300px;
+      background: radial-gradient(ellipse, rgba(232,85,53,0.1) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .header-inner { position: relative; z-index: 1; }
+
+    .logo-wrap { display: flex; justify-content: center; margin-bottom: 1.2rem; }
+    .logo-oct {
+      width: 100px; height: 106px;
+      filter: drop-shadow(0 0 22px rgba(232,85,53,0.35)) drop-shadow(0 5px 14px rgba(0,0,0,0.45));
+      transition: filter 0.35s;
+    }
+    [data-theme="light"] .logo-oct {
+      filter: drop-shadow(0 0 18px rgba(232,85,53,0.28)) drop-shadow(0 4px 10px rgba(0,0,0,0.2));
+    }
+    .hero-tagline {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(1rem, 3.5vw, 1.5rem);
+      letter-spacing: 0.3em; color: var(--gold);
+      margin: 0.4rem 0 0.2rem; transition: color 0.35s;
+    }
+    .hero-eyebrow {
+      font-family: 'Outfit', sans-serif; font-size: 0.68rem; font-weight: 500;
+      letter-spacing: 0.26rem; text-transform: uppercase;
+      color: var(--text-muted); margin-bottom: 0.8rem; margin-top: 1rem;
+    }
+    h1 {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(3rem, 10vw, 6rem);
+      letter-spacing: 0.04em; line-height: 0.95; margin-bottom: 0.8rem;
+    }
+    h1 .line1 { color: var(--text-head); display: block; transition: color 0.35s; }
+    h1 .red   { color: var(--red); }
+    h1 .gold  { color: var(--gold); transition: color 0.35s; }
+    .hero-divider {
+      display: flex; align-items: center; justify-content: center;
+      gap: 0.8rem; margin: 1.2rem auto; color: var(--text-muted2); font-size: 0.85rem;
+    }
+    .hero-divider::before { content: ''; display: block; height: 1px; width: 60px; background: linear-gradient(90deg, transparent, var(--border2)); }
+    .hero-divider::after  { content: ''; display: block; height: 1px; width: 60px; background: linear-gradient(90deg, var(--border2), transparent); }
+    .hero-sub {
+      font-family: 'Outfit', sans-serif; font-size: 0.72rem; font-weight: 500;
+      letter-spacing: 0.22rem; text-transform: uppercase;
+      color: var(--text-muted); margin-bottom: 2rem;
+    }
+    .back-pill {
+      display: inline-flex; align-items: center; gap: 0.5rem;
+      font-family: 'Outfit', sans-serif; font-size: 0.7rem; font-weight: 500;
+      letter-spacing: 0.1rem; text-transform: uppercase;
+      padding: 0.45rem 1.15rem; border: 1px solid var(--border2);
+      color: var(--text-body); border-radius: 5px;
+      transition: border-color 0.2s, color 0.2s;
+    }
+    .back-pill::before { content: '←'; }
+    .back-pill:hover { border-color: var(--red); color: var(--red); }
+
+    /* ═══════════════════════════════════════════════
+       SECTION
+    ═══════════════════════════════════════════════ */
+    section { border-bottom: 1px solid var(--border); transition: background 0.35s, border-color 0.35s; }
+    .section-inner { max-width: 1160px; margin: 0 auto; padding: 4.5rem 1.5rem; }
+    .section-eyebrow {
+      font-family: 'Outfit', sans-serif; font-size: 0.62rem; font-weight: 600;
+      letter-spacing: 0.3rem; text-transform: uppercase; color: var(--red); margin-bottom: 0.5rem;
+    }
+    h2 {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(2.2rem, 6vw, 3.6rem);
+      letter-spacing: 0.06em; line-height: 1;
+      color: var(--text-head); margin-bottom: 0.5rem; transition: color 0.35s;
+    }
+    h2 .accent { color: var(--gold); transition: color 0.35s; }
+    .ornament {
+      font-family: 'Playfair Display', serif; color: var(--gold-dim);
+      font-size: 0.9rem; letter-spacing: 0.5rem; opacity: 0.5;
+      margin-bottom: 2rem; display: block;
+    }
+
+    /* ═══════════════════════════════════════════════
+       FEED GRID
+    ═══════════════════════════════════════════════ */
+    .feed-grid {
+      display: grid; grid-template-columns: 1fr 380px;
+      gap: 2rem; align-items: start;
+    }
+    @media (max-width: 920px) { .feed-grid { grid-template-columns: 1fr; } }
+
+    .col-header {
+      display: flex; align-items: center; justify-content: space-between;
+      flex-wrap: wrap; gap: 0.6rem; margin-bottom: 1.2rem;
+      padding-bottom: 0.9rem; border-bottom: 1px solid var(--border);
+      transition: border-color 0.35s;
+    }
+    .col-label {
+      font-family: 'Outfit', sans-serif; font-size: 0.62rem; font-weight: 600;
+      letter-spacing: 0.28rem; text-transform: uppercase;
+      color: var(--red); display: flex; align-items: center; gap: 0.5rem;
+    }
+    .live-dot {
+      width: 6px; height: 6px; border-radius: 50%; background: var(--red);
+      animation: pulse 2s ease-in-out infinite; flex-shrink: 0;
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50%       { opacity: 0.4; transform: scale(0.7); }
+    }
+    .col-meta {
+      font-family: 'Outfit', sans-serif; font-size: 0.68rem;
+      color: var(--text-muted); font-style: italic; transition: color 0.35s;
+    }
+    .col-meta a { color: var(--red); transition: color 0.2s; }
+    .col-meta a:hover { color: var(--gold); }
+
+    /* Loading / error */
+    .feed-loading {
+      text-align: center; padding: 5rem 1rem;
+      font-family: 'Outfit', sans-serif; font-size: 0.9rem; color: var(--text-muted);
+    }
+    .spinner {
+      width: 38px; height: 38px; border-radius: 50%;
+      border: 3px solid var(--border2); border-top-color: var(--red);
+      animation: spin 0.8s linear infinite; margin: 0 auto 1.2rem;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .feed-error {
+      text-align: center; padding: 4rem 1rem; font-family: 'Outfit', sans-serif;
+    }
+    .feed-error .err-icon { font-size: 2rem; margin-bottom: 0.75rem; }
+    .feed-error p { color: var(--text-muted); font-size: 0.88rem; margin-bottom: 1rem; }
+    .feed-error a {
+      font-size: 0.7rem; font-weight: 600; letter-spacing: 0.12rem; text-transform: uppercase;
+      color: #fff; background: var(--red); padding: 0.55rem 1.3rem;
+      border-radius: 5px; display: inline-block; transition: background 0.2s;
+    }
+    .feed-error a:hover { background: var(--red-hover); }
+
+    /* Feed list */
+    .feed-list {
+      display: flex; flex-direction: column; gap: 1px;
+      background: var(--border); border: 1px solid var(--border);
+      border-radius: 8px; overflow: hidden;
+      transition: background 0.35s, border-color 0.35s;
+    }
+    .feed-item {
+      background: var(--card); padding: 1.4rem 1.6rem;
+      display: flex; flex-direction: column; gap: 0.3rem;
+      transition: background 0.2s; position: relative;
+      text-decoration: none; color: inherit;
+    }
+    .feed-item::before {
+      content: ''; position: absolute; left: 0; top: 0; bottom: 0;
+      width: 3px; background: var(--border2); transition: background 0.2s;
+    }
+    .feed-item:hover { background: var(--card-hover); }
+    .feed-item:hover::before { background: var(--red); }
+    .fi-meta { display: flex; align-items: center; gap: 0.7rem; flex-wrap: wrap; }
+    .fi-date {
+      font-family: 'Outfit', sans-serif; font-size: 0.65rem; font-weight: 600;
+      letter-spacing: 0.14rem; text-transform: uppercase; color: var(--gold); transition: color 0.35s;
+    }
+    .fi-cat {
+      font-family: 'Outfit', sans-serif; font-size: 0.62rem;
+      letter-spacing: 0.1rem; text-transform: uppercase;
+      color: var(--text-muted2); transition: color 0.35s;
+    }
+    .fi-cat::before { content: '·  '; }
+    .fi-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(1.05rem, 2.5vw, 1.4rem);
+      letter-spacing: 0.05em; line-height: 1.15;
+      color: var(--text-head); transition: color 0.2s;
+    }
+    .feed-item:hover .fi-title { color: var(--red); }
+    .fi-desc {
+      font-family: 'Outfit', sans-serif; font-size: 0.83rem;
+      color: var(--text-muted); line-height: 1.6;
+      display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical;
+      overflow: hidden; transition: color 0.35s;
+    }
+    .fi-read {
+      font-family: 'Outfit', sans-serif; font-size: 0.67rem; font-weight: 600;
+      letter-spacing: 0.12rem; text-transform: uppercase; color: var(--text-muted2);
+      margin-top: 0.15rem; display: flex; align-items: center; gap: 0.3rem; transition: color 0.2s;
+    }
+    .feed-item:hover .fi-read { color: var(--red); }
+    .fi-read::after { content: '→'; transition: transform 0.2s; }
+    .feed-item:hover .fi-read::after { transform: translateX(3px); }
+
+    /* Load more */
+    .load-more-wrap { text-align: center; margin-top: 1.4rem; }
+    .load-more-btn {
+      font-family: 'Outfit', sans-serif; font-size: 0.7rem; font-weight: 600;
+      letter-spacing: 0.15rem; text-transform: uppercase;
+      color: var(--text-muted); background: var(--card);
+      border: 1px solid var(--border2); border-radius: 6px;
+      padding: 0.65rem 1.5rem; cursor: pointer;
+      transition: border-color 0.2s, color 0.2s, background 0.2s;
+    }
+    .load-more-btn:hover { border-color: var(--red); color: var(--red); background: var(--card-hover); }
+    .load-more-btn:disabled { opacity: 0.4; cursor: default; pointer-events: none; }
+
+    /* Facebook column */
+    .fb-col { position: sticky; top: 72px; }
+    .fb-wrap {
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: 8px; overflow: hidden; transition: background 0.35s, border-color 0.35s;
+    }
+    .fb-plugin-scaler { width: 100%; overflow: hidden; }
+    .fb-note {
+      padding: 0.75rem 1rem; text-align: center;
+      font-family: 'Outfit', sans-serif; font-size: 0.68rem;
+      color: var(--text-muted); border-top: 1px solid var(--border); transition: border-color 0.35s;
+    }
+    .fb-note a { color: var(--red); transition: color 0.2s; }
+    .fb-note a:hover { color: var(--gold); }
+
+    /* ═══════════════════════════════════════════════
+       FOOTER — identical to index.html
+    ═══════════════════════════════════════════════ */
+    footer {
+      background: var(--footer-bg);
+      border-top: 1px solid rgba(255,255,255,0.06);
+      text-align: center; padding: 3rem 1.5rem 2.5rem; transition: background 0.35s;
+    }
+    footer::before {
+      content: ''; display: block; width: 100%; height: 2px; margin-bottom: 2.5rem;
+      background: linear-gradient(90deg, transparent, var(--red), var(--gold), var(--red), transparent);
+    }
+    .footer-name { font-family: 'Bebas Neue', sans-serif; font-size: 1.5rem; letter-spacing: 0.1em; color: #f0ebe4; margin-bottom: 0.4rem; }
+    .footer-ornament { color: #967030; font-size: 0.8rem; letter-spacing: 0.5rem; opacity: 0.4; margin: 0.3rem 0 0.7rem; }
+    .footer-meta { font-family: 'Outfit', sans-serif; font-size: 0.75rem; color: rgba(255,255,255,0.35); letter-spacing: 0.06rem; line-height: 2; }
+    .footer-meta a { color: var(--red); transition: color 0.2s; }
+    .footer-meta a:hover { color: var(--gold); }
+    .footer-since { opacity: 0.3; font-size: 0.68rem; margin-top: 0.3rem; }
+
+    .fade-in { opacity: 0; transform: translateY(18px); transition: opacity 0.6s ease, transform 0.6s ease; }
+    .fade-in.visible { opacity: 1; transform: none; }
+
+    @media (max-width: 480px) {
+      nav a { padding: 0.8rem 0.65rem; font-size: 0.6rem; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ══ NAV ══════════════════════════════════════════════ -->
+<nav aria-label="Site navigation">
+  <div class="nav-links">
+    <a href="index.html">Home</a>
+    <a href="index.html#about">About</a>
+    <a href="index.html#carry">What We Carry</a>
+    <a href="index.html#visit">Hours &amp; Location</a>
+    <a href="index.html#social">Find Us Online</a>
+    <a href="news.html" class="active">What's New</a>
+  </div>
+  <button class="theme-toggle" id="themeToggle" aria-label="Toggle light/dark mode">
+    <span class="toggle-icon" id="toggleIcon">☀️</span>
+    <div class="toggle-track"><div class="toggle-thumb"></div></div>
+    <span class="toggle-label" id="toggleLabel">Light mode</span>
+  </button>
+</nav>
+
+<!-- ══ HEADER ═══════════════════════════════════════════ -->
+<header>
+  <div class="header-inner">
+    <div class="logo-wrap">
+      <svg class="logo-oct" viewBox="0 0 100 106" xmlns="http://www.w3.org/2000/svg" aria-label="Ray &amp; Judy's Book Stop logo">
+        <defs>
+          <radialGradient id="og" cx="45%" cy="35%" r="65%">
+            <stop offset="0%" stop-color="#d94020"/>
+            <stop offset="100%" stop-color="#8a1f08"/>
+          </radialGradient>
+        </defs>
+        <polygon points="30,4 70,4 97,31 97,71 70,98 30,98 3,71 3,31" fill="url(#og)"/>
+        <polygon points="33,9 67,9 92,34 92,68 67,93 33,93 8,68 8,34" fill="none" stroke="rgba(255,255,255,0.22)" stroke-width="1.5"/>
+        <text x="50" y="44" text-anchor="middle" font-family="'Outfit',sans-serif" font-weight="800" font-size="18" fill="white" letter-spacing="1.5">BOOK</text>
+        <text x="50" y="64" text-anchor="middle" font-family="'Outfit',sans-serif" font-weight="800" font-size="18" fill="white" letter-spacing="1.5">STOP</text>
+        <g transform="translate(50,80) scale(0.78)">
+          <path d="M-16,3 Q-8,-5 0,0 Q8,-5 16,3" stroke="rgba(255,255,255,0.7)" stroke-width="1.8" fill="none"/>
+          <line x1="0" y1="0" x2="0" y2="7" stroke="rgba(255,255,255,0.7)" stroke-width="1.8"/>
+          <path d="M-16,3 L-16,10 Q-8,2 0,7 Q8,2 16,10 L16,3" fill="rgba(255,255,255,0.45)"/>
+        </g>
+      </svg>
+    </div>
+
+    <p class="hero-tagline">Your Neighborhood Bookstore</p>
+    <p class="hero-eyebrow">Rockaway Borough, NJ &nbsp;·&nbsp; Est. 1984</p>
+
+    <h1>
+      <span class="line1">What's</span>
+      <span class="red">New</span>
+    </h1>
+
+    <div class="hero-divider">✦</div>
+    <p class="hero-sub">Weekly Pull List &nbsp;·&nbsp; New Arrivals &nbsp;·&nbsp; Every Wednesday</p>
+
+    <a class="back-pill" href="index.html">Back to main site</a>
+  </div>
+</header>
+
+<!-- ══ FEED SECTION ══════════════════════════════════════ -->
+<section>
+  <div class="section-inner fade-in">
+
+    <p class="section-eyebrow">Fresh off the press</p>
+    <h2>Comics &amp; <span class="accent">Updates</span></h2>
+    <span class="ornament">— ✦ —</span>
+
+    <div class="feed-grid">
+
+      <!-- LEFT: Weekly Pull RSS -->
+      <div class="pull-col">
+        <div class="col-header">
+          <div class="col-label"><span class="live-dot"></span>Weekly Pull Feed</div>
+          <div class="col-meta" id="feedUpdated"></div>
+        </div>
+
+        <div class="feed-loading" id="feedLoading">
+          <div class="spinner"></div>
+          Loading this week's pull list…
+        </div>
+
+        <div class="feed-error" id="feedError" style="display:none">
+          <div class="err-icon">📡</div>
+          <p>Couldn't load the feed right now.</p>
+          <a href="https://mrcyberrick.github.io/weekly-pull-feed/rss.xml" target="_blank" rel="noopener">View feed directly</a>
+        </div>
+
+        <div class="feed-list" id="feedList" style="display:none"></div>
+
+        <div class="load-more-wrap" id="loadMoreWrap" style="display:none">
+          <button class="load-more-btn" id="loadMoreBtn">Load More</button>
+        </div>
+      </div>
+
+      <!-- RIGHT: Facebook Page Plugin -->
+      <div class="fb-col">
+        <div class="col-header">
+          <div class="col-label"><span class="live-dot"></span>Facebook</div>
+          <div class="col-meta">
+            <a href="https://www.facebook.com/pages/ray-judys-book-stop/218209818226021" target="_blank" rel="noopener">View page →</a>
+          </div>
+        </div>
+
+        <div class="fb-wrap">
+          <div id="fb-root"></div>
+          <script async defer crossorigin="anonymous"
+            src="https://connect.facebook.net/en_US/sdk.js#xfbml=1&version=v19.0">
+          </script>
+          <div class="fb-plugin-scaler">
+            <div class="fb-page"
+              data-href="https://www.facebook.com/pages/ray-judys-book-stop/218209818226021"
+              data-tabs="timeline"
+              data-width="380"
+              data-height="640"
+              data-small-header="true"
+              data-adapt-container-width="true"
+              data-hide-cover="false"
+              data-show-facepile="false">
+              <blockquote cite="https://www.facebook.com/pages/ray-judys-book-stop/218209818226021" class="fb-xfbml-parse-ignore">
+                <a href="https://www.facebook.com/pages/ray-judys-book-stop/218209818226021">Ray &amp; Judy's Book Stop on Facebook</a>
+              </blockquote>
+            </div>
+          </div>
+          <div class="fb-note">
+            Posts not showing? &nbsp;<a href="https://www.facebook.com/pages/ray-judys-book-stop/218209818226021" target="_blank" rel="noopener">Open on Facebook →</a>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /feed-grid -->
+  </div>
+</section>
+
+<!-- ══ FOOTER ═══════════════════════════════════════════ -->
+<footer>
+  <svg width="58" height="62" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" style="display:block;margin:0 auto 1.2rem;">
+    <defs>
+      <radialGradient id="fg" cx="45%" cy="35%" r="65%">
+        <stop offset="0%" stop-color="#d94020"/>
+        <stop offset="100%" stop-color="#8a1f08"/>
+      </radialGradient>
+    </defs>
+    <polygon points="30,4 70,4 97,31 97,71 70,98 30,98 3,71 3,31" fill="url(#fg)"/>
+    <polygon points="33,9 67,9 92,34 92,68 67,93 33,93 8,68 8,34" fill="none" stroke="rgba(255,255,255,0.2)" stroke-width="1.5"/>
+    <text x="50" y="44" text-anchor="middle" font-family="sans-serif" font-weight="800" font-size="18" fill="white" letter-spacing="1.5">BOOK</text>
+    <text x="50" y="64" text-anchor="middle" font-family="sans-serif" font-weight="800" font-size="18" fill="white" letter-spacing="1.5">STOP</text>
+    <g transform="translate(50,80) scale(0.78)">
+      <path d="M-16,3 Q-8,-5 0,0 Q8,-5 16,3" stroke="rgba(255,255,255,0.7)" stroke-width="1.8" fill="none"/>
+      <line x1="0" y1="0" x2="0" y2="7" stroke="rgba(255,255,255,0.7)" stroke-width="1.8"/>
+      <path d="M-16,3 L-16,10 Q-8,2 0,7 Q8,2 16,10 L16,3" fill="rgba(255,255,255,0.45)"/>
+    </g>
+  </svg>
+  <div class="footer-name">Ray &amp; Judy's Book Stop</div>
+  <div class="footer-ornament">✦ ✦ ✦</div>
+  <div class="footer-meta">
+    40 W Main St, Rockaway, NJ 07866 &nbsp;·&nbsp;
+    <a href="tel:9735869182">(973) 586-9182</a> &nbsp;·&nbsp;
+    <a href="mailto:bookstop@hotmail.com">bookstop@hotmail.com</a>
+    <div class="footer-since">In business since 1984 &nbsp;·&nbsp; A Rockaway Borough original</div>
+  </div>
+</footer>
+
+<script>
+  /* ── Theme ── */
+  const html = document.documentElement;
+  const btn  = document.getElementById('themeToggle');
+  const icon = document.getElementById('toggleIcon');
+  const lbl  = document.getElementById('toggleLabel');
+  const stored  = localStorage.getItem('bookstop-theme');
+  const sysDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+  const init    = stored || (sysDark ? 'dark' : 'light');
+  html.setAttribute('data-theme', init);
+  syncToggle(init);
+  btn.addEventListener('click', () => {
+    const next = html.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+    html.setAttribute('data-theme', next);
+    localStorage.setItem('bookstop-theme', next);
+    syncToggle(next);
+  });
+  function syncToggle(t) {
+    icon.textContent = t === 'dark' ? '☀️' : '🌙';
+    lbl.textContent  = t === 'dark' ? 'Light mode' : 'Dark mode';
+  }
+
+  /* ── Fade-in ── */
+  new IntersectionObserver(
+    es => es.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); }),
+    { threshold: 0.05 }
+  ).observe(document.querySelector('.fade-in'));
+
+  /* ── RSS Feed ── */
+  const FEED_URL  = 'https://mrcyberrick.github.io/weekly-pull-feed/rss.xml';
+  const PROXY     = 'https://api.rss2json.com/v1/api.json?rss_url=';
+  const PAGE_SIZE = 10;
+  let allItems = [], currentPage = 0;
+
+  const loadingEl = document.getElementById('feedLoading');
+  const errorEl   = document.getElementById('feedError');
+  const listEl    = document.getElementById('feedList');
+  const updatedEl = document.getElementById('feedUpdated');
+  const moreWrap  = document.getElementById('loadMoreWrap');
+  const moreBtn   = document.getElementById('loadMoreBtn');
+
+  async function loadFeed() {
+    try {
+      const res  = await fetch(`${PROXY}${encodeURIComponent(FEED_URL)}&count=50`);
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      const data = await res.json();
+      if (data.status !== 'ok' || !Array.isArray(data.items) || !data.items.length)
+        throw new Error('empty');
+
+      allItems = data.items;
+
+      const dateRef = data.feed?.lastBuildDate || allItems[0]?.pubDate;
+      if (dateRef) {
+        updatedEl.textContent = `Updated ${new Date(dateRef).toLocaleDateString('en-US',
+          { weekday:'short', month:'short', day:'numeric', year:'numeric' })}`;
+      }
+
+      loadingEl.style.display = 'none';
+      listEl.style.display    = '';
+      renderPage();
+
+      if (allItems.length > PAGE_SIZE) {
+        moreWrap.style.display = '';
+        moreBtn.addEventListener('click', () => {
+          currentPage++;
+          renderPage();
+          if ((currentPage + 1) * PAGE_SIZE >= allItems.length) {
+            moreBtn.disabled = true;
+            moreBtn.textContent = 'All caught up ✦';
+          }
+        });
+      }
+    } catch (err) {
+      console.warn('Feed error:', err);
+      loadingEl.style.display = 'none';
+      errorEl.style.display   = '';
+    }
+  }
+
+  function renderPage() {
+    allItems.slice(currentPage * PAGE_SIZE, (currentPage + 1) * PAGE_SIZE).forEach(item => {
+      const a = document.createElement('a');
+      a.className = 'feed-item';
+      a.href = item.link || '#';
+      a.target = '_blank';
+      a.rel = 'noopener noreferrer';
+
+      const dateStr = item.pubDate
+        ? new Date(item.pubDate).toLocaleDateString('en-US',
+            { weekday:'short', month:'short', day:'numeric', year:'numeric' })
+        : '';
+      const cats   = Array.isArray(item.categories) ? item.categories : [];
+      const catStr = cats.slice(0, 2).join(' · ');
+      const tmp    = document.createElement('div');
+      tmp.innerHTML = item.description || item.content || '';
+      const desc = (tmp.textContent || '').replace(/\s+/g, ' ').trim();
+
+      a.innerHTML = `
+        <div class="fi-meta">
+          ${dateStr ? `<span class="fi-date">${esc(dateStr)}</span>` : ''}
+          ${catStr  ? `<span class="fi-cat">${esc(catStr)}</span>`   : ''}
+        </div>
+        <div class="fi-title">${esc(item.title || 'Untitled')}</div>
+        ${desc ? `<div class="fi-desc">${esc(desc)}</div>` : ''}
+        <div class="fi-read">Read more</div>
+      `;
+      listEl.appendChild(a);
+    });
+  }
+
+  function esc(s) {
+    return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  }
+
+  loadFeed();
+</script>
+</body>
+</html>
