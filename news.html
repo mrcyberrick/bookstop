@@ -473,7 +473,7 @@
         <div class="feed-error" id="feedError" style="display:none">
           <div class="err-icon">📡</div>
           <p>Couldn't load the feed right now.</p>
-          <a href="https://mrcyberrick.github.io/weekly-pull-feed/rss.xml" target="_blank" rel="noopener">View feed directly</a>
+          <a href="https://mrcyberrick.us/weekly-pull-feed/rss.xml" target="_blank" rel="noopener">View feed directly</a>
         </div>
 
         <div class="feed-list" id="feedList" style="display:none"></div>
@@ -546,12 +546,12 @@
   <div class="footer-meta">
     40 W Main St, Rockaway, NJ 07866 &nbsp;·&nbsp;
     <a href="tel:9735869182">(973) 586-9182</a> &nbsp;·&nbsp;
-    <a href="mailto:bookstop@hotmail.com">bookstop@hotmail.com</a>
+    <a href="/cdn-cgi/l/email-protection#d9bbb6b6b2aaadb6a999b1b6adb4b8b0b5f7bab6b4"><span class="__cf_email__" data-cfemail="f2909d9d9981869d82b29a9d869f939b9edc919d9f">[email&#160;protected]</span></a>
     <div class="footer-since">In business since 1984 &nbsp;·&nbsp; A Rockaway Borough original</div>
   </div>
 </footer>
 
-<script>
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
   /* ── Theme ── */
   const html = document.documentElement;
   const btn  = document.getElementById('themeToggle');
@@ -580,8 +580,7 @@
   ).observe(document.querySelector('.fade-in'));
 
   /* ── RSS Feed ── */
-  const FEED_URL  = 'https://mrcyberrick.github.io/weekly-pull-feed/rss.xml';
-  const PROXY     = 'https://api.rss2json.com/v1/api.json?rss_url=';
+  const FEED_URL  = 'https://mrcyberrick.us/weekly-pull-feed/rss.xml';
   const PAGE_SIZE = 10;
   let allItems = [], currentPage = 0;
 
@@ -592,20 +591,65 @@
   const moreWrap  = document.getElementById('loadMoreWrap');
   const moreBtn   = document.getElementById('loadMoreBtn');
 
+  /* ── Try rss2json first, then allorigins XML fallback ── */
+  async function tryRss2json() {
+    const url = `https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(FEED_URL)}&count=50`;
+    const res  = await fetch(url);
+    if (!res.ok) throw new Error(`rss2json HTTP ${res.status}`);
+    const data = await res.json();
+    if (data.status !== 'ok' || !Array.isArray(data.items) || !data.items.length)
+      throw new Error('rss2json empty/error');
+
+    const dateRef = data.feed?.lastBuildDate || data.items[0]?.pubDate;
+    return { items: data.items, dateRef };
+  }
+
+  async function tryAllorigins() {
+    // allorigins returns the raw XML so we parse it ourselves
+    const url = `https://api.allorigins.win/raw?url=${encodeURIComponent(FEED_URL)}`;
+    const res  = await fetch(url);
+    if (!res.ok) throw new Error(`allorigins HTTP ${res.status}`);
+    const xml  = await res.text();
+    return parseRssXml(xml);
+  }
+
+  function parseRssXml(xml) {
+    const doc   = new DOMParser().parseFromString(xml, 'text/xml');
+    const nodes = [...doc.querySelectorAll('item')];
+    if (!nodes.length) throw new Error('no items in XML');
+
+    const items = nodes.map(n => ({
+      title:       n.querySelector('title')?.textContent       || '',
+      link:        n.querySelector('link')?.textContent        ||
+                   n.querySelector('guid')?.textContent        || '#',
+      description: n.querySelector('description')?.textContent || '',
+      pubDate:     n.querySelector('pubDate')?.textContent     || '',
+      categories:  [...n.querySelectorAll('category')].map(c => c.textContent),
+    }));
+
+    const dateRef = doc.querySelector('channel > lastBuildDate')?.textContent
+                 || items[0]?.pubDate || '';
+    return { items, dateRef };
+  }
+
   async function loadFeed() {
     try {
-      const res  = await fetch(`${PROXY}${encodeURIComponent(FEED_URL)}&count=50`);
-      if (!res.ok) throw new Error(`HTTP ${res.status}`);
-      const data = await res.json();
-      if (data.status !== 'ok' || !Array.isArray(data.items) || !data.items.length)
-        throw new Error('empty');
+      let result;
+      try {
+        result = await tryRss2json();
+      } catch (e1) {
+        console.warn('rss2json failed, trying allorigins:', e1);
+        result = await tryAllorigins();
+      }
 
-      allItems = data.items;
+      allItems = result.items;
 
-      const dateRef = data.feed?.lastBuildDate || allItems[0]?.pubDate;
-      if (dateRef) {
-        updatedEl.textContent = `Updated ${new Date(dateRef).toLocaleDateString('en-US',
-          { weekday:'short', month:'short', day:'numeric', year:'numeric' })}`;
+      if (result.dateRef) {
+        const d = new Date(result.dateRef);
+        if (!isNaN(d)) {
+          updatedEl.textContent = `Updated ${d.toLocaleDateString('en-US',
+            { weekday:'short', month:'short', day:'numeric', year:'numeric' })}`;
+        }
       }
 
       loadingEl.style.display = 'none';
@@ -618,13 +662,13 @@
           currentPage++;
           renderPage();
           if ((currentPage + 1) * PAGE_SIZE >= allItems.length) {
-            moreBtn.disabled = true;
+            moreBtn.disabled    = true;
             moreBtn.textContent = 'All caught up ✦';
           }
         });
       }
     } catch (err) {
-      console.warn('Feed error:', err);
+      console.warn('All feed methods failed:', err);
       loadingEl.style.display = 'none';
       errorEl.style.display   = '';
     }
