@@ -751,4 +751,22 @@
         ${coverHtml}
         <div class="fi-body">
           <div class="fi-meta">
-            ${dateStr ? `<span class="
+            ${dateStr ? `<span class="fi-date">${esc(dateStr)}</span>` : ''}
+            ${catStr  ? `<span class="fi-cat">${esc(catStr)}</span>`   : ''}
+          </div>
+          <div class="fi-title">${esc(item.title || 'Untitled')}</div>
+          <div class="fi-read">Read more</div>
+        </div>
+      `;
+      listEl.appendChild(a);
+    });
+  }
+
+  function esc(s) {
+    return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  }
+
+  loadFeed();
+</script>
+</body>
+</html>
