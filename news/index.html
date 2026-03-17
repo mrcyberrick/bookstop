@@ -614,34 +614,37 @@
   const moreWrap  = document.getElementById('loadMoreWrap');
   const moreBtn   = document.getElementById('loadMoreBtn');
 
-  /* ── Try rss2json → allorigins → corsproxy, each with 6s timeout ── */
+  /* ── Proxy chain: allorigins (primary) → rss2json → thingproxy ── */
   function fetchWithTimeout(url, ms) {
     const ctrl = new AbortController();
     const id = setTimeout(() => ctrl.abort(), ms);
     return fetch(url, { signal: ctrl.signal }).finally(() => clearTimeout(id));
   }
 
+  async function tryAllorigins() {
+    // /get returns JSON wrapper with contents field — avoids gzip issues
+    const url = `https://api.allorigins.win/get?url=${encodeURIComponent(FEED_URL)}`;
+    const res  = await fetchWithTimeout(url, 15000);
+    if (!res.ok) throw new Error(`allorigins ${res.status}`);
+    const json = await res.json();
+    if (!json.contents) throw new Error('allorigins empty');
+    return parseRssXml(json.contents);
+  }
+
   async function tryRss2json() {
-    const url = `https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(FEED_URL)}&count=50`;
-    const res  = await fetchWithTimeout(url, 6000);
+    const url = `https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(FEED_URL)}`;
+    const res  = await fetchWithTimeout(url, 10000);
     if (!res.ok) throw new Error(`rss2json ${res.status}`);
     const data = await res.json();
     if (data.status !== 'ok' || !Array.isArray(data.items) || !data.items.length)
-      throw new Error('rss2json empty');
+      throw new Error(`rss2json: ${data.message || 'empty'}`);
     return { items: data.items, dateRef: data.feed?.lastBuildDate || data.items[0]?.pubDate };
   }
 
-  async function tryAllorigins() {
-    const url = `https://api.allorigins.win/raw?url=${encodeURIComponent(FEED_URL)}`;
-    const res  = await fetchWithTimeout(url, 6000);
-    if (!res.ok) throw new Error(`allorigins ${res.status}`);
-    return parseRssXml(await res.text());
-  }
-
-  async function tryCorsproxy() {
-    const url = `https://corsproxy.io/?${encodeURIComponent(FEED_URL)}`;
-    const res  = await fetchWithTimeout(url, 6000);
-    if (!res.ok) throw new Error(`corsproxy ${res.status}`);
+  async function tryThingproxy() {
+    const url = `https://thingproxy.freeboard.io/fetch/${FEED_URL}`;
+    const res  = await fetchWithTimeout(url, 10000);
+    if (!res.ok) throw new Error(`thingproxy ${res.status}`);
     return parseRssXml(await res.text());
   }
 
@@ -664,9 +667,9 @@
     try {
       let result;
       const proxies = [
-        { name: 'rss2json',   fn: tryRss2json   },
         { name: 'allorigins', fn: tryAllorigins  },
-        { name: 'corsproxy',  fn: tryCorsproxy   },
+        { name: 'rss2json',   fn: tryRss2json    },
+        { name: 'thingproxy', fn: tryThingproxy  },
       ];
       for (const proxy of proxies) {
         try {
@@ -755,7 +758,7 @@
             ${catStr  ? `<span class="fi-cat">${esc(catStr)}</span>`   : ''}
           </div>
           <div class="fi-title">${esc(item.title || 'Untitled')}</div>
-          <div class="fi-read">Read more</div>
+          <div class="fi-read">Read more</>
         </div>
       `;
       listEl.appendChild(a);
