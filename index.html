@@ -1,13 +1,20 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="dark">
+<html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Ray & Judy's Book Stop — Rockaway, NJ</title>
   <meta name="description" content="Ray & Judy's Book Stop — Rockaway, NJ. Books, comics, maps, trading cards & collectibles. Open since 1984. 40 W Main St, (973) 586-9182." />
-  <link rel="icon" type="image/x-icon" href="favicon.ico" />
-  <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png" />
-  <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png" />
+  <script>
+    (function() {
+      var t = localStorage.getItem('bookstop-theme') ||
+              (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+      document.documentElement.setAttribute('data-theme', t);
+    })();
+  </script>
+  <link rel="icon" type="image/x-icon" href="/assets/favicon.ico" />
+  <link rel="icon" type="image/png" sizes="192x192" href="/assets/icon-192.png" />
+  <link rel="apple-touch-icon" sizes="180x180" href="/assets/apple-touch-icon.png" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet" />
@@ -359,8 +366,16 @@
     /* ═══════════════════════════════════════════════
        UTILITIES
     ═══════════════════════════════════════════════ */
-    .fade-in { opacity: 0; transform: translateY(18px); transition: opacity 0.6s ease, transform 0.6s ease; }
-    .fade-in.visible { opacity: 1; transform: none; }
+    .fade-in { animation: fadeUp 0.6s ease both; }
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(18px); }
+      to   { opacity: 1; transform: none; }
+    }
+    .fade-in:nth-child(1) { animation-delay: 0.05s; }
+    .fade-in:nth-child(2) { animation-delay: 0.15s; }
+    .fade-in:nth-child(3) { animation-delay: 0.25s; }
+    .fade-in:nth-child(4) { animation-delay: 0.35s; }
+    .fade-in:nth-child(5) { animation-delay: 0.45s; }
 
     @media (max-width: 480px) {
       nav a { padding: 0.8rem 0.65rem; font-size: 0.6rem; }
@@ -422,7 +437,7 @@
     <a href="#visit">Hours &amp; Location</a>
     <a href="#reviews">Reviews</a>
     <a href="#social">Find Us Online</a>
-    <a href="news.html" class="whats-new">What's New</a>
+    <a href="/news" class="whats-new">What's New</a>
   </div>
   <button class="theme-toggle" id="themeToggle" aria-label="Toggle light/dark mode">
     <span class="toggle-icon" id="toggleIcon">☀️</span>
@@ -620,13 +635,6 @@
 </footer>
 
 <script>
-  // ── Scroll fade-in
-  const obs = new IntersectionObserver(
-    entries => entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); }),
-    { threshold: 0.1 }
-  );
-  document.querySelectorAll('.fade-in').forEach(el => obs.observe(el));
-
   // ── Highlight today's hours row
   const days  = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
   const today = days[new Date().getDay()];
@@ -634,36 +642,23 @@
     if (tr.querySelector('td')?.textContent.trim() === today) tr.classList.add('today');
   });
 
-  // ── Theme toggle
-  const html  = document.documentElement;
+  // ── Theme toggle (theme already set by inline head script)
   const btn   = document.getElementById('themeToggle');
   const icon  = document.getElementById('toggleIcon');
   const label = document.getElementById('toggleLabel');
 
-  const stored     = localStorage.getItem('bookstop-theme');
-  const systemDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-  const initial    = stored || (systemDark ? 'dark' : 'light');
-  html.setAttribute('data-theme', initial);
-  updateToggleUI(initial);
+  function updateToggleUI(theme) {
+    icon.textContent  = theme === 'dark' ? '☀️' : '🌙';
+    label.textContent = theme === 'dark' ? 'Light mode' : 'Dark mode';
+  }
+  updateToggleUI(document.documentElement.getAttribute('data-theme'));
 
   btn.addEventListener('click', () => {
-    const next = html.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
-    html.setAttribute('data-theme', next);
+    const next = document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+    document.documentElement.setAttribute('data-theme', next);
     localStorage.setItem('bookstop-theme', next);
     updateToggleUI(next);
   });
-
-  function updateToggleUI(theme) {
-    if (theme === 'dark') {
-      icon.textContent  = '☀️';
-      label.textContent = 'Light mode';
-      btn.setAttribute('aria-label', 'Switch to light mode');
-    } else {
-      icon.textContent  = '🌙';
-      label.textContent = 'Dark mode';
-      btn.setAttribute('aria-label', 'Switch to dark mode');
-    }
-  }
 </script>
 </body>
 </html>
